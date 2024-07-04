@@ -1,19 +1,11 @@
 import { Gift } from "../models/gift.model.js"
 import sequelize from "../config/db.connection.js"
-import * as fireBaseService from "../services/firebase.service.js";
-import { GiftUser } from "../models/giftUser.model.js";
 
 const giftRepo = {
     createGift: async ({ name, creditCount, isPhysicalGift, image, description }) => {
         try {
             let imageUrl;
-            if (image) {
-
-                const file = await fireBaseService.uploadFileToStorage(image, "gift");
-                if (file.status) {
-                    imageUrl = file.data;
-                }
-            }
+           
             await sequelize.sync();
             const result = await Gift.create({ name, creditCount, isPhysicalGift, image: imageUrl, description });
             return result;

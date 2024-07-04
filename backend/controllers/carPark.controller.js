@@ -1,11 +1,10 @@
-import giftShippingDetailsService from "../services/giftShippingDetails.services.js";
+import carParkService from "../services/carPark.services.js";
 
-const giftShippingDetailsController = {
-    createGiftShippingDetails: async (req, res) => {
+const carParkController = {
+    create: async (req, res) => {
         try {
-            const user_id = req.userId.id;
-            const { country, city, zip_code, address, gift_id } = req.body;
-            const result = await giftShippingDetailsService.createGiftShippingDetails({ country, city, zip_code, address, user_id,  gift_id });
+            const { address, latitude, longitude, name_of_the_park, image_url, number_of_spots, spot_size, price, facilities, special_notes, registration_certificate_no, is_Accepted } = req.body;
+            const result = await carParkService.create({ address, latitude, longitude, name_of_the_park, image_url, number_of_spots, spot_size, price, facilities, special_notes, registration_certificate_no, is_Accepted });
             if (result.status) {
                 res.status(200).json({
                     response_code: 200,
@@ -26,10 +25,36 @@ const giftShippingDetailsController = {
         }
     },
 
-    getGiftShippingDetailsById: async (req, res) => {
+
+    getAll: async (req, res) => {
+        try {
+
+            const result = await carParkService.getAll();
+            if (result.status) {
+                res.status(200).json({
+                    response_code: 200,
+                    success: true, result
+                });
+            } else {
+                res.status(400).json({
+                    response_code: 400,
+                    result
+                });
+            }
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({
+                response_code: 500,
+                status: false,
+                success: false, message: error.message
+            });
+        }
+    },
+
+    getById: async (req, res) => {
         const id = req.params.id;
         try {
-            const result = await giftShippingDetailsService.getGiftShippingDetailsById({ id });
+            const result = await carParkService.getById({ id });
             if (result.status) {
                 res.status(200).json({
                     response_code: 200,
@@ -52,10 +77,10 @@ const giftShippingDetailsController = {
 
 
     },
-    updateGiftShippingDetails: async (req, res) => {
-        const { id, country, city, zip_code, address, gift_user_id, is_gift_placed } = req.body;
+    update: async (req, res) => {
+        const { id, address, latitude, longitude, name_of_the_park, image_url, number_of_spots, spot_size, price, facilities, special_notes, registration_certificate_no, is_Accepted } = req.body;
         try {
-            const result = await giftShippingDetailsService.updateGiftShippingDetails({ id, country, city, zip_code, address, gift_user_id, is_gift_placed });
+            const result = await carParkService.update({ id, address, latitude, longitude, name_of_the_park, image_url, number_of_spots, spot_size, price, facilities, special_notes, registration_certificate_no, is_Accepted });
             if (result.status) {
                 res.status(200).json({
                     response_code: 200,
@@ -76,10 +101,11 @@ const giftShippingDetailsController = {
         }
     },
 
-    deleteGiftShippingDetailsById: async (req, res) => {
+    deleteById: async (req, res) => {
+        const id = req.params.id;
+
         try {
-            const id = req.params.id;
-            const result = await giftShippingDetailsService.deleteGiftShippingDetailsById({ id });
+            const result = await carParkService.deleteById({ id });
 
             if (result.status) {
                 res.status(200).json({
@@ -104,4 +130,4 @@ const giftShippingDetailsController = {
     }
 }
 
-export default giftShippingDetailsController;
+export default carParkController;
