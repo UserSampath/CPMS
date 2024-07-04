@@ -82,6 +82,11 @@ const CarPark = () => {
       });
   };
 
+  const handleTabChange = (tabId) => {
+    setActiveTab(tabId);
+  };
+
+
   return (
     <div className="container-fluid">
       <ViewCarPark
@@ -131,8 +136,9 @@ const CarPark = () => {
               </li>
               <li className="w-100">
                 <Link
-                  to="/dashboard/car-park"
-                  className="nav-link px-0 align-middle text-white d-flex justify-content-between">
+                  to="/car-park"
+                  className="nav-link px-0 align-middle text-white d-flex justify-content-between"
+                >
                   <span>
                     <i className="fs-4 bi-columns ms-2"></i>
                     <span className="ms-3 d-none d-sm-inline">
@@ -178,6 +184,15 @@ const CarPark = () => {
                 </Link>
               </li>
             </ul>
+            {/* User Profile Section */}
+            <div className="mt-auto">
+              <div className="d-flex align-items-center p-2">
+                <span className="text-white me-3">Samadhi Anupali</span>
+                <i className="bi bi-box-arrow-in-right fs-4"></i>
+              </div>
+            </div>
+
+            {/* Search Box */}
           </div>
         </div>
         <div className="col p-0 m-0">
@@ -334,8 +349,6 @@ const CarPark = () => {
               )}
             </div>
           </div>
-
-          <Outlet />
         </div>
       </div>
     </div>
