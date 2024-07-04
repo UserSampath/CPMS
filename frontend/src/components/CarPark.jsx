@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link, Outlet } from "react-router-dom";
 import logo from "../assets/images/logo.png";
 
 const CarPark = () => {
-  // Dummy data for registration requests
+    const [activeTab, setActiveTab] = useState("registration-requests");
+
   const registrationRequests = [
     {
       id: 1,
@@ -21,6 +22,28 @@ const CarPark = () => {
     },
     // Add more dummy data as needed
   ];
+
+  const acceptedCarParks = [
+    {
+      id: 1,
+      carParkName: "Accepted Park A",
+      ownerName: "Alice Johnson",
+      location: "City C",
+      spaces: 40,
+    },
+    {
+      id: 2,
+      carParkName: "Accepted Park B",
+      ownerName: "Bob Brown",
+      location: "City D",
+      spaces: 25,
+    },
+    // Add more accepted car parks as needed
+  ];
+  const handleTabChange = (tabId) => {
+    setActiveTab(tabId);
+  };
+
 
   return (
     <div className="container-fluid">
@@ -69,7 +92,7 @@ const CarPark = () => {
               </li>
               <li className="w-100">
                 <Link
-                  to="/dashboard/car-park"
+                  to="/car-park"
                   className="nav-link px-0 align-middle text-white d-flex justify-content-between"
                 >
                   <span>
@@ -120,6 +143,13 @@ const CarPark = () => {
                 </Link>
               </li>
             </ul>
+            {/* User Profile Section */}
+            <div className="mt-auto">
+              <div className="d-flex align-items-center p-2">
+                <span className="text-white me-3">Samadhi Anupali</span>
+                <i className="bi bi-box-arrow-in-right fs-4"></i>
+              </div>
+            </div>
 
             {/* Search Box */}
           </div>
@@ -155,29 +185,19 @@ const CarPark = () => {
             {/* Tabs */}
             <ul className="nav nav-tabs" id="carParkTabs" role="tablist">
               <li className="nav-item" role="presentation">
-                <button
-                  className="nav-link active"
+              <button
+                  className={`nav-link ${activeTab === "registration-requests" ? "active" : ""}`}
                   id="registration-requests-tab"
-                  data-bs-toggle="tab"
-                  data-bs-target="#registration-requests"
-                  type="button"
-                  role="tab"
-                  aria-controls="registration-requests"
-                  aria-selected="true"
+                  onClick={() => handleTabChange("registration-requests")}
                 >
                   Registration Requests
                 </button>
               </li>
               <li className="nav-item" role="presentation">
                 <button
-                  className="nav-link"
+                  className={`nav-link ${activeTab === "accepted-car-parks" ? "active" : ""}`}
                   id="accepted-car-parks-tab"
-                  data-bs-toggle="tab"
-                  data-bs-target="#accepted-car-parks"
-                  type="button"
-                  role="tab"
-                  aria-controls="accepted-car-parks"
-                  aria-selected="false"
+                  onClick={() => handleTabChange("accepted-car-parks")}
                 >
                   Accepted Car Parks
                 </button>
@@ -187,12 +207,7 @@ const CarPark = () => {
             {/* Tab panes */}
             <div className="tab-content" id="carParkTabContent">
               {/* Registration Requests tab pane */}
-              <div
-                className="tab-pane fade show active"
-                id="registration-requests"
-                role="tabpanel"
-                aria-labelledby="registration-requests-tab"
-              >
+              <div className={`tab-pane fade ${activeTab === "registration-requests" ? "show active" : ""}`} id="registration-requests" role="tabpanel">
                 <table className="table mt-3">
                   <thead>
                     <tr>
@@ -211,12 +226,9 @@ const CarPark = () => {
                         <td>{request.location}</td>
                         <td>{request.spaces}</td>
                         <td>
-                          <button className="btn btn-sm btn-info me-2">
-                            Edit
-                          </button>
-                          <button className="btn btn-sm btn-danger">
-                            Delete
-                          </button>
+                          <button className="btn btn-sm btn-info me-2">View</button>
+                          <button className="btn btn-sm btn-success me-2">Approve</button>
+                          <button className="btn btn-sm btn-danger">Reject</button>
                         </td>
                       </tr>
                     ))}
@@ -225,19 +237,35 @@ const CarPark = () => {
               </div>
 
               {/* Accepted Car Parks tab pane */}
-              <div
-                className="tab-pane fade"
-                id="accepted-car-parks"
-                role="tabpanel"
-                aria-labelledby="accepted-car-parks-tab"
-              >
-                {/* Content for Accepted Car Parks tab */}
-                <p>Content for Accepted Car Parks tab goes here.</p>
+              <div className={`tab-pane fade ${activeTab === "accepted-car-parks" ? "show active" : ""}`} id="accepted-car-parks" role="tabpanel">
+                <table className="table mt-3">
+                  <thead>
+                    <tr>
+                      <th scope="col">Car Park Name</th>
+                      <th scope="col">Owner Name</th>
+                      <th scope="col">Location</th>
+                      <th scope="col">Number of Spaces</th>
+                      <th scope="col">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {acceptedCarParks.map((park) => (
+                      <tr key={park.id}>
+                        <td>{park.carParkName}</td>
+                        <td>{park.ownerName}</td>
+                        <td>{park.location}</td>
+                        <td>{park.spaces}</td>
+                        <td>
+                          <button className="btn btn-sm btn-info me-2">View</button>
+                          <button className="btn btn-sm btn-danger">Remove</button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               </div>
             </div>
           </div>
-
-          <Outlet />
         </div>
       </div>
     </div>
