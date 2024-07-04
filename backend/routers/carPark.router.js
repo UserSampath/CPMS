@@ -5,6 +5,6 @@ router.post("/create", carParkController.create);
 router.get("/getById/:id", carParkController.getById);
 router.get("/getAll", carParkController.getAll);
 router.put("/update", carParkController.update);
-router.delete("/deleteById/:id", carParkController.deleteById);
+router.delete("/delete/:id", carParkController.deleteById);
 
 export default router;  

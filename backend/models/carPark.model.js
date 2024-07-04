@@ -17,7 +17,7 @@ export const CarPark = sequelize.define(
             allowNull: false,
         },
         name_of_the_park: {
-            type: DataTypes.INTEGER,
+            type: DataTypes.STRING,
             allowNull: false,
         },
         image_url: {
@@ -51,7 +51,7 @@ export const CarPark = sequelize.define(
             type: DataTypes.BOOLEAN,
             defaultValue: false
         },
-       
+
     },
     {
         tableName: "car_park",

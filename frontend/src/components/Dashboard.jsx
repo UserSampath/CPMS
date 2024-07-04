@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import { Link, Outlet } from "react-router-dom";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import logo from "../assets/images/logo.png"; // Assuming you have a logo image
-
+import axios from "axios";
+import { toast, Zoom } from "react-toastify";
 const Dashboard = () => {
   const [formData, setFormData] = useState({
     address: "",
@@ -15,27 +16,83 @@ const Dashboard = () => {
     parkName: "",
     numberOfSpots: "",
     price: "",
-    specialNotes: ""
+    specialNotes: "",
   });
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    console.log(formData); 
-    // Reset form fields after submission if needed
-    setFormData({
-      address: "",
-      longitude: "",
-      imageUrl: "",
-      spotSize: "",
-      facilities: "",
-      regCertificate: "",
-      latitude: "",
-      parkName: "",
-      numberOfSpots: "",
-      price: "",
-      specialNotes: ""
-    });
+
+    try {
+      console.log(formData);
+      const response = await axios.post(
+        "http://localhost:8000/carPark/create",
+        {
+          address: formData.address,
+          latitude: formData.latitude,
+          longitude: formData.latitude,
+          name_of_the_park: formData.parkName,
+          image_url: formData.imageUrl,
+          number_of_spots: formData.numberOfSpots,
+          spot_size: formData.spotSize,
+          price: formData.price,
+          facilities: formData.facilities,
+          special_notes: formData.specialNotes,
+          registration_certificate_no: formData.regCertificate,
+        }
+      );
+      if (response.data.result.status) {
+        toast.success("Data save successful", {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+          transition: Zoom,
+        });
+      } else {
+        toast.error("Data save failed", {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+          transition: Zoom,
+        });
+      }
+      console.log("🚀 ~ handleSubmit ~ response:", response);
+    } catch (error) {
+      toast.error(error.message, {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+        transition: Zoom,
+      });
+    } finally {
+      setFormData({
+        address: "",
+        longitude: "",
+        imageUrl: "",
+        spotSize: "",
+        facilities: "",
+        regCertificate: "",
+        latitude: "",
+        parkName: "",
+        numberOfSpots: "",
+        price: "",
+        specialNotes: "",
+      });
+    }
   };
 
   // Function to handle input changes
@@ -43,7 +100,7 @@ const Dashboard = () => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
       ...prevData,
-      [name]: value
+      [name]: value,
     }));
   };
 
@@ -55,8 +112,7 @@ const Dashboard = () => {
             <Link
               to="/dashboard"
               className="d-flex justify-content-center align-items-center pb-3 mb-md-1 mt-md-3 me-md-auto text-white text-decoration-none w-100"
-              style={{ height: "150px" }}
-            >
+              style={{ height: "150px" }}>
               <img
                 src={logo}
                 alt="Logo"
@@ -66,13 +122,11 @@ const Dashboard = () => {
             </Link>
             <ul
               className="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start"
-              id="menu"
-            >
+              id="menu">
               <li className="w-100">
                 <Link
                   to="/dashboard"
-                  className="nav-link text-white px-0 align-middle"
-                >
+                  className="nav-link text-white px-0 align-middle">
                   <i className="fs-4 bi-speedometer2 ms-2"></i>
                   <span className="ms-3 d-none d-sm-inline">Dashboard</span>
                 </Link>
@@ -80,8 +134,7 @@ const Dashboard = () => {
               <li className="w-100">
                 <Link
                   to="/dashboard/employee"
-                  className="nav-link text-white px-0 align-middle"
-                >
+                  className="nav-link text-white px-0 align-middle">
                   <i className="fs-4 bi-people ms-2"></i>
                   <span className="ms-3 d-none d-sm-inline">
                     Manage Employees
@@ -91,8 +144,7 @@ const Dashboard = () => {
               <li className="w-100">
                 <Link
                   to="/dashboard/employee"
-                  className="nav-link px-0 align-middle text-white"
-                >
+                  className="nav-link px-0 align-middle text-white">
                   <i className="fs-4 bi-columns ms-2"></i>
                   <span className="ms-3 d-none d-sm-inline">Category</span>
                 </Link>
@@ -100,8 +152,7 @@ const Dashboard = () => {
               <li className="w-100">
                 <Link
                   to="/dashboard/profile"
-                  className="nav-link px-0 align-middle text-white"
-                >
+                  className="nav-link px-0 align-middle text-white">
                   <i className="fs-4 bi-person ms-2"></i>
                   <span className="ms-3 d-none d-sm-inline">Profile</span>
                 </Link>
@@ -131,14 +182,12 @@ const Dashboard = () => {
             <div className="d-flex">
               <Link
                 to="/dashboard"
-                className="me-3 text-decoration-none text-danger"
-              >
+                className="me-3 text-decoration-none text-danger">
                 / Dashboard
               </Link>
               <Link
                 to="/register-car-park"
-                className="text-decoration-none text-secondary"
-              >
+                className="text-decoration-none text-secondary">
                 / Register Car Park
               </Link>
             </div>
@@ -304,8 +353,7 @@ const Dashboard = () => {
                       name="specialNotes"
                       value={formData.specialNotes}
                       onChange={handleChange}
-                      rows="3"
-                    ></textarea>
+                      rows="3"></textarea>
                   </div>
                 </div>
               </div>

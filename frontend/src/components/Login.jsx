@@ -11,18 +11,20 @@ const Login = () => {
     })
     const[error, setError] = useState(null)
     const navigate = useNavigate()
-    axios.defaults.withCredentials = true;
+    // axios.defaults.withCredentials = true;
     const handleSubmit = (event) => {
         event.preventDefault()
-        axios.post('http://localhost:3000/auth/adminlogin', values)
-        .then(result => {
-            if(result.data.loginStatus) {
-                navigate('/dashboard')
-            }else{
-                setError(result.data.Error)
+        axios
+          .post("http://localhost:8000/admin/login", values)
+          .then((result) => {
+            console.log("🚀 ~ .then ~ result:", result)
+            if (result.data.result.status) {
+              navigate("/carpark");
+            } else {
+              setError(result.data.Error);
             }
-        })
-        .catch(err => console.log(err))
+          })
+          .catch((err) => console.log(err));
     }
 
   return (
